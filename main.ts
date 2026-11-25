@@ -4,7 +4,7 @@
 const LINE =
   "Have you tried turning it off, counting to ten, and turning it back on while we both pretend I didn't just google your problem?";
 
-function validate(line: string): void {
+function validateEntry(line: string): void {
   if (line.length === 0) {
     throw new Error("line must not be empty");
   }
@@ -19,19 +19,23 @@ function validate(line: string): void {
   }
 }
 
-validate(LINE);
+validateEntry(LINE);
 
 const fs = require("fs");
 const path = require("path");
 
-const outDir = "/output";
-fs.mkdirSync(outDir, { recursive: true });
-const outPath = path.join(outDir, "entry.txt");
-fs.writeFileSync(outPath, LINE + "\n", "utf8");
+function writeEntry(line: string): void {
+  const outDir = "/output";
+  fs.mkdirSync(outDir, { recursive: true });
+  const outPath = path.join(outDir, "entry.txt");
+  fs.writeFileSync(outPath, line + "\n", "utf8");
 
-const readBack = fs.readFileSync(outPath, "utf8");
-if (readBack !== LINE + "\n") {
-  throw new Error("entry.txt does not match the line exactly");
+  const readBack = fs.readFileSync(outPath, "utf8");
+  if (readBack !== line + "\n") {
+    throw new Error("entry.txt does not match the line exactly");
+  }
 }
+
+writeEntry(LINE);
 
 console.log(LINE);
